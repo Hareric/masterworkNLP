@@ -19,4 +19,4 @@ def preProcess(fiction_path):
 
 if __name__ == '__main__':
     # preProcess('data/水浒传.txt')
-    print range(3, 5)
+    print range(3, 0, -1)
