@@ -41,7 +41,7 @@ color_dict = {0: "pink", 1: "green", 2: "purple", 3: "orange", 4: "blue", 5: "ye
               35: "#CDAD00", 36: "#CD853F", 37: "#CD5555", 38: "#CAE1FF", 39: "#BCEE68", 40: "#A0522D", 41: "#AEEEEE",
               42: "#9AFF9A",
               43: "#B03060", 44: "#8B6508", 45: "#8B475D", 46: "#8B1A1A", 47: "#836FFF", 48: "#7A378B", 49: "#76EEC6",
-              50: "black"
+              50: "black", 51: "#CCAD00"
               }
 
 
@@ -54,35 +54,49 @@ class DrawGraph:
         self.graph = graph
         self.node_list = node_list
 
-    def draw_graph(self, file_name):
+    def draw_graph(self, file_name, sub_vertex=None):
         """
         :param file_name:
         :return:
         """
-        graph = self.graph
+        if sub_vertex is not None:
+            print self.graph
+
+            g = self.graph.subgraph(sub_vertex, implementation="auto")
+            print '-------'
+            print g
+        else:
+            g = self.graph
         node_list = self.node_list
-        layout = graph.layout_fruchterman_reingold()
+        layout = g.layout_fruchterman_reingold()
         v_size_list = []  # 记录节点大小的列表
         v_color_list = []  # 记录节点颜色的列表
         v_label_list = []  # 记录标签名的列表
         for node in node_list:
-            v_size_list.append(300 * node.value + 10)
-            v_color_list.append(color_dict[node.group])
-            v_label_list.append(node.label.encode('utf-8'))
+            # v_size_list.append(300 * node.value + 10)
+            v_size_list.append(20)
+            v_color_list.append(color_dict[node.group % color_dict.__len__()])
+            v_label_list.append(node.label.encode('UTF-8'))
+            # v_label_list.append(node.group)
 
         p = igraph.Plot()
-        p.background = "#f0f0f0"  # 将背景改为白色，默认是灰色网格
 
-        p.add(graph,
-              bbox=(50, 50, 550, 550),  # 设置图占窗体的大小，默认是(0,0,600,600)
+        p.background = "#f0f0f0"  # 将背景改为白色，默认是灰色网格
+        p.add(g,
+              # bbox=(100,100,1600, 1600),  # 设置图占窗体的大小，默认是(0,0,600,600)
+              dpi = 300,
               layout=layout,  # 图的布局
               vertex_size=v_size_list,  # 点的尺寸
-              edge_width=0.5, edge_color="grey",  # 边的宽度和颜色，建议灰色，比较好看
-              vertex_label_size=8,  # 点标签的大小
+              edge_width=0.5,
+              edge_color="grey",  # 边的宽度和颜色，建议灰色，比较好看
+              vertex_label_size=10,  # 点标签的大小
               vertex_label=v_label_list,
-              vertex_color=v_color_list, )  # 为每个点着色
+              vertex_color=v_color_list
+              )  # 为每个点着色
+
         p.save(file_name)  # 将图保存到特定路径，igraph只支持png和pdf
-        p.remove(graph)  # 清除图像
+        # p.show()
+        p.remove(g)  # 清除图像
 
 
 class MakeGraph:
@@ -110,6 +124,7 @@ class MakeGraph:
         for k, v in node_labels_dict.items():
             self.node_list[k].label = v
         self.graph = None  # 节点图
+        self.divide_result = None
         self.divide()
 
     def __create_graph(self):
@@ -178,7 +193,7 @@ class MakeGraph:
             else:
                 node.influence = 5
 
-    def divide(self):
+    def divide(self, sub_graph=False):
         """
         使用igraph包中BGLL算法对已构建好的图进行社区检测
         并为每个节点标明
@@ -188,11 +203,12 @@ class MakeGraph:
         self.__calculate_rank()
         # self.__find_topK()
         self.__calc_influence()
-        divide_result = graph.community_walktrap(weights=weights, steps=4).as_clustering()
+        self.divide_result = graph.community_walktrap(weights=weights, steps=4).as_clustering()
         # divide_result = graph.community_multilevel(weights=weights)
-        for index, community in enumerate(divide_result):
+        for index, community in enumerate(self.divide_result):
             for n in community:
                 self.node_list[n].group = index
+
 
 
 if __name__ == '__main__':

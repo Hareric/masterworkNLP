@@ -1,22 +1,14 @@
 # coding=utf-8
 import re
 
-a = '你好'
-b = '   你好'
+# coding=utf-8
+import urllib2
+import re
+# 6285399016554496258 6282837243963048194
+# content = urllib2.urlopen('http://toutiao.com/group/6285399016554496258/comments/?count=901&format=json').read()
+# comment = re.findall('"text": "(.*?)",', content)
+# f1 = open('data/c2.txt', 'w')
+# for j in comment:
+#     f1.write(j.decode('unicode-escape').encode('utf-8') + '\n')
 
-
-def preProcess(fiction_path):
-    f = open(fiction_path)
-    line_list = f.readlines()
-    for t, line in enumerate(line_list):
-        if t == 1000:
-            break
-        if not line.strip():
-            continue
-        if line.startswith(' '):
-            print line.strip()
-
-
-if __name__ == '__main__':
-    # preProcess('data/水浒传.txt')
-    print range(3, 0, -1)
+print 124319%13
