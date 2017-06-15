@@ -20,13 +20,8 @@ if __name__ == '__main__':
                 links.append([name_index[appear_name[i]], name_index[appear_name[j]], 1])
 
     MG = MakeGraph(links, dict(enumerate(en_names)))
-    sub_node = []
-    print MG.divide_result
-    for community in MG.divide_result:
-        if community.__len__() > 1:
-            sub_node += community
 
-    DG = DrawGraph(MG.graph, MG.node_list).draw_graph('data/SNA.png',sub_node)
+    DG = DrawGraph(MG).draw_graph('data/SNA.png',2)
     # for node in MG.node_list:
     #     print node.label,  node.group
 

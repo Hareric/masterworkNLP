@@ -46,38 +46,42 @@ color_dict = {0: "pink", 1: "green", 2: "purple", 3: "orange", 4: "blue", 5: "ye
 
 
 class DrawGraph:
-    def __init__(self, graph, node_list):
+    def __init__(self, MG):
         """
         :param graph: igraph.Graph()
         :param node_list: [.label .value .rank .group, ]
         """
-        self.graph = graph
-        self.node_list = node_list
+        self.MG = MG
+        self.graph = MG.graph
+        self.node_list = MG.node_list
 
-    def draw_graph(self, file_name, sub_vertex=None):
+    def draw_graph(self, file_name, least_community=None):
         """
         :param file_name:
         :return:
         """
-        if sub_vertex is not None:
-            print self.graph
-
-            g = self.graph.subgraph(sub_vertex, implementation="auto")
-            print '-------'
-            print g
+        if least_community is not None:
+            sub_vertex = []
+            for community in self.MG.divide_result:
+                if community.__len__() > least_community:
+                    sub_vertex += community
+            sub_vertex.sort()
         else:
-            g = self.graph
+            sub_vertex = range(self.MG.user_num)
+
+        g = self.graph.subgraph(sub_vertex, implementation="auto")
+
         node_list = self.node_list
         layout = g.layout_fruchterman_reingold()
         v_size_list = []  # 记录节点大小的列表
         v_color_list = []  # 记录节点颜色的列表
         v_label_list = []  # 记录标签名的列表
-        for node in node_list:
-            # v_size_list.append(300 * node.value + 10)
-            v_size_list.append(20)
-            v_color_list.append(color_dict[node.group % color_dict.__len__()])
-            v_label_list.append(node.label.encode('UTF-8'))
-            # v_label_list.append(node.group)
+        for node_index in sub_vertex:
+            v_size_list.append(500 * node_list[node_index].value + 10)
+            # v_size_list.append(20)
+            v_color_list.append(color_dict[node_list[node_index].group % 11])
+            v_label_list.append(node_list[node_index].label.encode('UTF-8'))
+            # v_label_list.append(node_list[node_index].group)
 
         p = igraph.Plot()
 
