@@ -70,7 +70,6 @@ class DrawGraph:
             sub_vertex = range(self.MG.user_num)
 
         g = self.graph.subgraph(sub_vertex, implementation="auto")
-
         node_list = self.node_list
         layout = g.layout_fruchterman_reingold()
         v_size_list = []  # 记录节点大小的列表
@@ -80,7 +79,7 @@ class DrawGraph:
             v_size_list.append(500 * node_list[node_index].value + 10)
             # v_size_list.append(20)
             v_color_list.append(color_dict[node_list[node_index].group % 11])
-            v_label_list.append(node_list[node_index].label.encode('UTF-8'))
+            v_label_list.append(node_list[node_index].label.encode('utf-8'))
             # v_label_list.append(node_list[node_index].group)
 
         p = igraph.Plot()
@@ -88,15 +87,17 @@ class DrawGraph:
         p.background = "#f0f0f0"  # 将背景改为白色，默认是灰色网格
         p.add(g,
               # bbox=(100,100,1600, 1600),  # 设置图占窗体的大小，默认是(0,0,600,600)
-              dpi = 300,
+              # dpi=300,
               layout=layout,  # 图的布局
               vertex_size=v_size_list,  # 点的尺寸
-              edge_width=0.5,
-              edge_color="grey",  # 边的宽度和颜色，建议灰色，比较好看
+              edge_width=0.3,
+              edge_arrow_size=0.8,  # 箭头长度
+              edge_arrow_width=0.3,  # 箭头宽度
+              edge_color="grey",  # 边的颜色
               vertex_label_size=10,  # 点标签的大小
               vertex_label=v_label_list,
-              vertex_color=v_color_list
-              )  # 为每个点着色
+              vertex_color=v_color_list,  # 为每个点着色
+              )
 
         p.save(file_name)  # 将图保存到特定路径，igraph只支持png和pdf
         # p.show()

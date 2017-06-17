@@ -11,4 +11,6 @@ import re
 # for j in comment:
 #     f1.write(j.decode('unicode-escape').encode('utf-8') + '\n')
 
-print 124319%13
+import numpy as np
+
+print np.arange(0,1,0.1)
