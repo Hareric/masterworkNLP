@@ -12,5 +12,8 @@ import re
 #     f1.write(j.decode('unicode-escape').encode('utf-8') + '\n')
 
 import numpy as np
-
-print np.arange(0,1,0.1)
+import random
+appear_name = '12312123'
+for i in range(len(appear_name)):
+        for j in range(i+1, len(appear_name)):
+            print i,j
