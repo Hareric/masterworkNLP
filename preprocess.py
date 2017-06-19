@@ -2,14 +2,14 @@
 
 def get_name_list(en=False):
     if en:
-        f = open('data/name')
+        f = open(u'data/name')
         content = f.readlines()
         name_list = []
         for line in content:
             name_list.append(line.decode('utf-8').strip())
         return name_list
 
-    f = open('data/人物名')
+    f = open(u'data/人物名')
     content = f.readlines()
     name_list = []
     for line in content:

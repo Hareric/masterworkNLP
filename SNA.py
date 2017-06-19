@@ -50,13 +50,11 @@ color_list = [
               ["#ffffb7", "#f9f995", "#f9f96d", "#fcfc46", "#ffff00"],
               ["#aaffaa", "#89ff89", "#60ff60", "#32ff32", "#00ff00"],
               ["#e0fcfc", "#b3fcfc", "#6cfcfc", "#28fcfc", "#00cece"],
-              ["#cbc9ff", "#a4a0ff", "#7c75ff", "#493fff", "#0d00ff"],
+              ["#cbc9ff", "#a4a0ff", "#7c75ff", "#493fff", "#6100ff"],
               ["#e293ff", "#d771fc", "#cf4cff", "#c423ff", "#ba00ff"],
               ["#fca9ed", "#fc88e7", "#fc62e0", "#fc3ad9", "#ff00d0"],
               ]
 
-
-# color_dict = {0: "#111110",1: "#111111"}
 
 
 class DrawGraph:
@@ -79,7 +77,7 @@ class DrawGraph:
         if least_community is not None:
             sub_vertex = []
             for community in self.MG.divide_result:
-                if community.__len__() > least_community:
+                if community.__len__() >= least_community:
                     sub_vertex += community
             sub_vertex.sort()
         else:
@@ -92,8 +90,10 @@ class DrawGraph:
         v_size_list = []  # 记录节点大小的列表
         v_color_list = []  # 记录节点颜色的列表
         v_label_list = []  # 记录标签名的列表
+        v_label_size = []  # 记录点标签的大小
         for node_index in sub_vertex:
-            v_size_list.append(900 * node_list[node_index].value + 10)
+            v_size_list.append(800 * node_list[node_index].value + 13)
+            v_label_size.append(300 * node_list[node_index].value + 8)
             if node_list[node_index].group == 0:
                 v_color_list.append(color_dict[int(random.random() * 10000) % 52])
             else:
@@ -103,25 +103,24 @@ class DrawGraph:
             else:
                 v_label_list.append(node_list[node_index].label.encode('utf-8'))
 
-        p = igraph.Plot()
+        p = igraph.Plot(bbox=(0,0,1000,600))
 
         p.background = "#f0f0f0"  # 将背景改为白色，默认是灰色网格
         p.add(g,
-              # bbox=(0, 0, 600, 600),  # 设置图占窗体的大小，默认是(0,0,600,600)
               layout=layout,  # 图的布局
               vertex_size=v_size_list,  # 点的尺寸
               edge_width=1,
               edge_arrow_size=0.8,  # 箭头长度
               edge_arrow_width=0.3,  # 箭头宽度
               edge_color="grey",  # 边的颜色
-              vertex_label_size=15,  # 点标签的大小
+              vertex_label_size=v_label_size,  # 点标签的大小
               vertex_label=v_label_list,
               vertex_color=v_color_list,  # 为每个点着色
-              margin=(30, 30, 30, 30)  # 设置边缘 防止点画到图外
+              margin=30  # 设置边缘 防止点画到图外
               )
 
         p.save(file_path)  # 将图保存到特定路径
-        p.show()
+        # p.show()
         p.remove(g)  # 清除图像
 
 
@@ -175,7 +174,7 @@ class MakeGraph:
                 weights.append(line[2])
         else:
             for i in range(self.user_num):
-                for j in range(self.user_num):
+                for j in range(self.user_num)[i:]:
                     if self.users_link[i, j] > self.weight_threshold:
                         edges += [(i, j)]
                         weights.append(self.users_link[i, j])
@@ -197,7 +196,7 @@ class MakeGraph:
         for node in self.node_list:
             node.rank = node_values.index(node.value)
 
-    def __find_topK(self):
+    def find_topK(self):
         """
         :param node_list: 节点属性列表
         :return: topK个节点属性列表
@@ -243,7 +242,7 @@ class MakeGraph:
         """
         graph, weights = self.__create_graph()
         self.__calculate_rank()
-        # self.__find_topK()
+        # print self.__find_topK()
         self.__calc_influence()
         # self.divide_result = graph.community_walktrap(weights=weights, steps=10).as_clustering()
         self.divide_result = graph.community_multilevel(weights=weights)
