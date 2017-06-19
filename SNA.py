@@ -120,8 +120,8 @@ class DrawGraph:
               margin=(30, 30, 30, 30)  # 设置边缘 防止点画到图外
               )
 
-        p.save(file_path)  # 将图保存到特定路径，igraph只支持png和pdf
-        # p.show()
+        p.save(file_path)  # 将图保存到特定路径
+        p.show()
         p.remove(g)  # 清除图像
 
 

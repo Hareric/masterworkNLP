@@ -27,14 +27,14 @@ if __name__ == '__main__':
         MG = MakeGraph(matrix, dict(enumerate(en_names)), 3)
         print MG.divide_result.modularity
         modu_list.append(MG.divide_result.modularity)
-        DG = DrawGraph(MG).draw_graph('data/character_relation_%i_%i.png' % (start, end), 2)
+        DG = DrawGraph(MG).draw_graph('data/character_relation_%i_%i.png' % (start, end), 5)
 
-    t = 8
-    n = 120 / t
-    for i in range(n):
-        run(i*t+1, (i+1) * t)
-    print "avg modularity: ", sum(modu_list)/n
-
+    # t = 8
+    # n = 120 / t
+    # for i in range(n):
+    #     run(i*t+1, (i+1) * t)
+    # print "avg modularity: ", sum(modu_list)/n
+    run(1,1)
 
 
 
