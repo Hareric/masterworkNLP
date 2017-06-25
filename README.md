@@ -56,7 +56,7 @@
 
 
 
-  [1]: http://www.lfd.uci.edu/gohlke/pythonlibs
+  [1]: http://www.lfd.uci.edu/~gohlke/pythonlibs
   [2]: http://oevwfwaro.bkt.clouddn.com/Heroes%20of%20the%20Marshes%20%281%29.jpg
   [3]: http://oevwfwaro.bkt.clouddn.com/Heroes%20of%20the%20Marshes%20%282%29.jpg
   [4]: http://oevwfwaro.bkt.clouddn.com/Heroes%20of%20the%20Marshes%20%283%29.jpg
